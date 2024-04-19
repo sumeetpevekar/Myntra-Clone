@@ -1,32 +1,28 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchStatusActions } from "../store/FetchStatusSlice";
-import { itemActions } from "../store/itemsSlice";
+import { itemsAction } from "../store/Items";
+import { fetchAction } from "../store/fetchSlice";
 
 const FetchItems = () => {
     const fetchStatus = useSelector(store => store.fetchStatus)
     const dispatch = useDispatch()
-    // console.log(fetchStatus)
     useEffect(() => {
-        if(fetchStatus.fetchDone) {
-            return;
-        }
-        const controller = new AbortController();
-        const signal = controller.signal;
-        dispatch(fetchStatusActions.markFetchingStarted())
-        fetch("http://localhost:8080/items", {signal})
-        .then((res) => res.json())
-        .then(({items}) =>{
-            dispatch(fetchStatusActions.markFetchDone())
-            dispatch(fetchStatusActions.markFetchingFinished())
-            dispatch(itemActions.addInitialItems(items))
-        });
-        return () => {
-            controller.abort();
-        };
+        if(fetchStatus.fetchDone) return ;
+        dispatch(fetchAction.markFetchingStarted())
+        fetch("http://localhost:8080/items",{
+            method : "GET",
+        })
+        .then(res => res.json())
+        .then(({items}) => {
+            console.log(items)
+            dispatch(fetchAction.markFetchDone ())
+            dispatch(fetchAction.markFetchingFinished())
+            dispatch(itemsAction.addInitialItems(items))
+        }) 
     }, [fetchStatus])
     return (
-        <></>
+        <>
+        </>
     )
 }
 export default FetchItems;

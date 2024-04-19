@@ -1,7 +1,7 @@
-import { useSelector } from "react-redux";
-import BagItem from "../components/BagItem";
 import BagSummary from "../components/BagSummary";
-
+import BagItem from "../components/BagItem";
+import { useSelector } from "react-redux";
+import EmptyBag from "../components/EmptyBag";
 const Bag = () => {
     const bagItems = useSelector(store => store.bag)
     const items = useSelector(store => store.items)
@@ -9,20 +9,19 @@ const Bag = () => {
         const itemIndex = bagItems.indexOf(item.id);
         return itemIndex >= 0;
     })
-
-    console.log(item);
-    return (
-        <>
-            <main>
-            <div className="bag-page">
-            <div className="bag-items-container">
-                {item.map(item => <BagItem key={item.id} item={item}></BagItem>)}
-            </div>
-            <BagSummary></BagSummary>
-            <div className="bag-summary"></div>
-            </div>
-            </main>
-        </>            
-    )
-}
+  return (
+      <>
+      {bagItems.length == 0 ? <EmptyBag></EmptyBag> : 
+      <main>
+        <div className="bag-page">
+          <div className="bag-items-container">
+              {item.map((item, index) => <BagItem item={item} key={index}></BagItem>)}
+          </div>
+          <BagSummary item={item}></BagSummary>
+        </div>
+      </main>
+      }
+    </>
+  );
+};
 export default Bag;

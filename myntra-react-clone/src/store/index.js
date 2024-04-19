@@ -1,11 +1,14 @@
-import {configureStore, createSlice} from "@reduxjs/toolkit"
-import itemsSlice from "./itemsSlice";
-import fetchStatusSlice from "./FetchStatusSlice";
-import BagSlice from "./BagSlice";
+import {configureStore} from "@reduxjs/toolkit"
+import { itemSlice } from "./Items"
+import { bagSlice } from "./bag"
+import { fetchSlice } from "./fetchSlice"
+import { wishListSlice } from "./WishList"
 
-const myntraStore = configureStore({reducer: {
-    items: itemsSlice.reducer,
-    fetchStatus: fetchStatusSlice.reducer,
-    bag: BagSlice.reducer,
-}})
-export default myntraStore;
+export const myntraStore = configureStore({
+    reducer : {
+        items : itemSlice.reducer,
+        bag : bagSlice.reducer,
+        fetchStatus : fetchSlice.reducer,
+        wishlist : wishListSlice.reducer,
+    }
+})
