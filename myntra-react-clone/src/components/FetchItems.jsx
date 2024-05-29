@@ -6,19 +6,25 @@ import { fetchAction } from "../store/fetchSlice";
 const FetchItems = () => {
     const fetchStatus = useSelector(store => store.fetchStatus)
     const dispatch = useDispatch()
+    const loadData = async () => {
+        try{
+            const res = await fetch("http://localhost:5000/api/auth/products");
+            const data = await res.json();
+            console.log(data);
+            console.log(res)
+            if(res.ok){
+                dispatch(fetchAction.markFetchDone ())
+                dispatch(fetchAction.markFetchingFinished())
+                dispatch(itemsAction.addInitialItems(data.message))
+            }
+        }catch(error){
+            console.log(error)
+        }
+    }
     useEffect(() => {
         if(fetchStatus.fetchDone) return ;
         dispatch(fetchAction.markFetchingStarted())
-        fetch("http://localhost:8080/items",{
-            method : "GET",
-        })
-        .then(res => res.json())
-        .then(({items}) => {
-            console.log(items)
-            dispatch(fetchAction.markFetchDone ())
-            dispatch(fetchAction.markFetchingFinished())
-            dispatch(itemsAction.addInitialItems(items))
-        }) 
+        loadData();
     }, [fetchStatus])
     return (
         <>
